@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap CDN -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Bootstrap Font Icon CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="stylesheet.css">
@@ -23,23 +23,27 @@
                             <h3><i class="bi bi-gear p-2"></i>Registro</h3>
                         </div>
                         <div class="card-body">
-                            <form id="registro" name="registro" method="POST" action="<?= $_SERVER['PHP_SELF'] ?>" novalidate>
+                            <form id="registro" name="registro" method="POST" 
+                                  action="<?= $_SERVER['PHP_SELF'] ?>" novalidate>
                                 <div class="input-group my-2">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
                                     <input type="text" class="form-control"  placeholder="usuario" 
-                                           id="usuario" name="usuario" minlength="3" autofocus required pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\-`´]+(\s+[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\-`´]+){0,5}$">
+                                           id="usuario" name="usuario" minlength="3" autofocus required 
+                                           pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\-`´]+(\s+[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\-`´ ]+){0,5}$">
                                 </div>
                                 <div class="text-danger" id="usuarioError"></div>
                                 <div class="input-group my-2">
                                     <span class="input-group-text"><i class="bi bi-key"></i></span>
                                     <input type="password" class="form-control" placeholder="contraseña" 
-                                           id="password1" name="password1" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}">
+                                           id="password1" name="password1" required 
+                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}">
                                 </div>
                                 <div class="text-danger" id="password1Error"></div>
                                 <div class="input-group my-2">
                                     <span class="input-group-text"><i class="bi bi-key"></i></span>
                                     <input type="password" class="form-control"  placeholder="Repita la contraseña" 
-                                           id="password2" name="password2" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}">
+                                           id="password2" name="password2" required 
+                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}">
                                 </div>
                                 <div class="text-danger" id="password2Error"></div>
                                 <div class="input-group my-2">
