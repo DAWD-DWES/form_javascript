@@ -1,47 +1,85 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const formRegistro = document.getElementById('registro');
-    // Añade el evento submit al formulario
-    formRegistro.addEventListener("submit", (event) => {
-        // Luego comprueba la validez general del formulario
-        const allValid = formRegistro.checkValidity();
-        if (!allValid) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-        }
-        const password1 = document.getElementById('password1');
-        const password2 = document.getElementById('password2');
-        const passwordErrorBox = document.getElementById('password2Error');
+  const formRegistro = document.getElementById("registro");
 
-        // Limpia cualquier estado de error previo
-        passwordErrorBox.textContent = "";
+  const mensajesError = {
+    usuario: {
+      valueMissing: "El nombre de usuario es obligatorio.",
+      patternMismatch: "Solo se permiten letras y espacios.",
+      tooShort: "Debe tener al menos 3 caracteres."
+    },
+    password1: {
+      valueMissing: "La contraseña es obligatoria.",
+      patternMismatch: "Debe tener mayúsculas, minúsculas, número y símbolo.",
+      tooShort: "Debe tener al menos 8 caracteres."
+    },
+    password2: {
+      valueMissing: "Debe repetir la contraseña.",
+      patternMismatch: "Debe tener mayúsculas, minúsculas, número y símbolo.",
+      tooShort: "Debe tener al menos 8 caracteres."
+    },
+    email: {
+      valueMissing: "El correo electrónico es obligatorio.",
+      typeMismatch: "Debes introducir un correo válido (ej: usuario@dominio.com)."
+    }
+  };
 
-        // Verifica si las contraseñas coinciden
-        if (password1.value !== password2.value) {
-            passwordErrorBox.textContent = "Los passwords introducidos deben de ser iguales";
-            event.preventDefault(); // Previene el envío del formulario
-            event.stopImmediatePropagation();
+  // Validación al enviar
+  formRegistro.addEventListener("submit", (event) => {
+    let valido = formRegistro.checkValidity();
+
+    // Limpia mensajes previos
+    formRegistro.querySelectorAll(".text-danger").forEach(div => div.textContent = "");
+
+    // Validar contraseñas iguales
+    const password1 = document.getElementById("password1");
+    const password2 = document.getElementById("password2");
+    const passwordErrorBox = document.getElementById("password2Error");
+
+    if (password1.value !== password2.value) {
+      passwordErrorBox.textContent = "Las contraseñas introducidas deben ser iguales.";
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      valido = false;
+    }
+
+    // Si el formulario no es válido, evitamos el envío
+    if (!valido) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  });
+
+  // Manejo de errores personalizados por campo
+  formRegistro.querySelectorAll("input").forEach((input) => {
+    const errorBox = document.getElementById(input.id + "Error");
+
+    input.addEventListener("invalid", (event) => {
+      event.preventDefault(); // Evita mensaje nativo del navegador
+
+      const errores = mensajesError[input.name];
+      if (!errores) return;
+
+      for (const tipo in input.validity) {
+        if (input.validity[tipo] && errores?.[tipo]) {
+          errorBox.textContent = errores[tipo];
+          break;
         }
+      }
     });
 
-    // Evento invalid y input para otros campos
-    const fields = Array.from(formRegistro.elements);
-    fields.forEach((field) => {
-        const errorBox = document.getElementById(field.id + "Error");
-        field.addEventListener("invalid", (event) => {
-            let message = "";
-            if (field.id === "usuario" && (field.validity.valueMissing || field.validity.tooShort || field.validity.patternMismatch)) {
-                message = "El nombre debe estar formado por al menos 3 caracteres de palabra.";
-            } else if (field.id === 'password1' && (field.validity.valueMissing || field.validity.patternMismatch)) {
-                message = "El password debe tener una minúscula, mayúscula, dígito y caracter especial";
-            } else if (field.id === "email" && (field.validity.valueMissing || field.validity.patternMismatch)) {
-                message = "El correo debe tener un formato correcto";
-            }
-            errorBox.textContent = message;
-        });
-
-        field.addEventListener("input", () => {
-            // Limpia el mensaje de error personalizado
-            errorBox.textContent = ""; // Limpia el texto del error
-        });
+    input.addEventListener("input", () => {
+      // Limpiar mensaje si el campo se vuelve válido
+      const errores = mensajesError[input.name];
+      if (input.checkValidity()) {
+        errorBox.textContent = "";
+      } else {
+        for (const tipo in input.validity) {
+          if (input.validity[tipo] && errores?.[tipo]) {
+            errorBox.textContent = errores[tipo];
+            break;
+          }
+        }
+      }
     });
+  });
 });
