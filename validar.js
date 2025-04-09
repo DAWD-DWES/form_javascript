@@ -53,9 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
   formRegistro.querySelectorAll("input").forEach((input) => {
     const errorBox = document.getElementById(input.id + "Error");
 
-    input.addEventListener("invalid", (event) => {
-      event.preventDefault(); // Evita mensaje nativo del navegador
-
+    const mostrarMensaje = () => {
       const errores = mensajesError[input.name];
       if (!errores) return;
 
@@ -65,20 +63,32 @@ document.addEventListener("DOMContentLoaded", function () {
           break;
         }
       }
+    };
+
+    input.addEventListener("invalid", (event) => {
+      event.preventDefault(); // Evita el mensaje nativo
+      mostrarMensaje();
     });
 
     input.addEventListener("input", () => {
-      // Limpiar mensaje si el campo se vuelve válido
-      const errores = mensajesError[input.name];
       if (input.checkValidity()) {
         errorBox.textContent = "";
       } else {
-        for (const tipo in input.validity) {
-          if (input.validity[tipo] && errores?.[tipo]) {
-            errorBox.textContent = errores[tipo];
-            break;
-          }
-        }
+        mostrarMensaje();
+      }
+    });
+
+    // Mostrar mensaje al hacer hover si es inválido
+    input.addEventListener("mouseenter", () => {
+      if (!input.checkValidity()) {
+        mostrarMensaje();
+      }
+    });
+
+    // Ocultar mensaje al salir si el campo es inválido
+    input.addEventListener("mouseleave", () => {
+      if (!input.checkValidity()) {
+        errorBox.textContent = "";
       }
     });
   });

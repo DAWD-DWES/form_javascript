@@ -1,9 +1,0 @@
-input:not([type="submit"]):valid:focus {
-    border: 2px solid green;
-    background-color: #eaffea;
-}
-
-input:not([type="submit"]):invalid:focus {
-    border: 2px solid red;
-    background-color: #ffecec;
-}
